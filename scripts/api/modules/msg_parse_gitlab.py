@@ -29,6 +29,9 @@ def parse_gitlab_msg_to_md(payload, config):
             username = safeget(o, 'user', 'name')
         return f'**{username}**'
 
+    if username(o) is None:
+        return None
+
     action = o.get("object_kind", None)
     if action == "push":
         ref_name = str_remove_prefix(safeget(o,'ref'),'refs/heads/')
