@@ -73,12 +73,12 @@ def parse_gitlab_msg_to_md(payload, config):
             r += f"{username(o)} note {note_type} {in_repo_link(o)}\n"
     elif action == "merge_request":
         merge_action = safeget(o,'object_attributes','action')
-        if merge_action == "close":
+        if merge_action == "close" or merge_action == 'update' or merge_action == 'approved':
             title = safeget(o,'object_attributes','title')
             url = safeget(o,'object_attributes','url')
             link = f"[{title}]({url})"
             r += f"{username(o)} {merge_action} Merge {link} {in_repo_link(o)}\n"
-        elif merge_action == 'open':
+        elif merge_action == 'open' or merge_action == 'reopen':
             title = safeget(o,'object_attributes','title')
             url = safeget(o,'object_attributes','url')
             link = f"[{title}]({url})"
