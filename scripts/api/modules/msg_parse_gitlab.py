@@ -71,6 +71,21 @@ def parse_gitlab_msg_to_md(payload, config):
             r += f"> {multiline_regroup(safeget(o,'object_attributes','note'))}\n"
         else:
             r += f"{username(o)} note {note_type} {in_repo_link(o)}\n"
+    elif action == "merge_request":
+        merge_action = safeget(o,'object_attributes','action')
+        if merge_action == "close":
+            title = safeget(o,'object_attributes','title')
+            url = safeget(o,'object_attributes','url')
+            link = f"[{title}]({url})"
+            r += f"{username(o)} {merge_action} Merge {link} {in_repo_link(o)}\n"
+        elif merge_action == 'open':
+            title = safeget(o,'object_attributes','title')
+            url = safeget(o,'object_attributes','url')
+            link = f"[{title}]({url})"
+            r += f"{username(o)} {merge_action} Merge {link} {in_repo_link(o)}\n"
+            r += f"> {multiline_regroup(safeget(o,'object_attributes','description'))}\n"
+        else:
+            r += f"{username(o)} merge {merge_action} {in_repo_link(o)}\n"
     else:
         r += f"{username(o)} do **{action}** {in_repo_link(o)}\n"
     return r
