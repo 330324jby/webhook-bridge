@@ -33,6 +33,10 @@ def parse_gitlab_msg_to_md(payload, config):
         return None
 
     action = o.get("object_kind", None)
+
+    if action is None:
+        return None
+
     if action == "push":
         ref_name = str_remove_prefix(safeget(o,'ref'),'refs/heads/')
         ref_filter = config.get('branch_filter', '*')
